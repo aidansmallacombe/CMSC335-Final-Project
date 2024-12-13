@@ -10,11 +10,13 @@
     <h2>Search Results</h2>
     <br>
     <!-- allows users to continue search from this page-->
-    <div id="search-bar-results">
-        <input id="movie-search-results" type="text" placeholder="Enter a movie title or genre...">
-         <!-- takes us to searchResults.ejs again, might change to input type submit for post-->
-        <button id="search-button-results">Search!</button>
-    </div>
+    <form action="/searchResults" method="post">
+        <div class="search-bar">
+            <input name="search" type="text" placeholder="Enter a movie title or genre...">
+            <!-- takes us to searchResults.ejs again, might change to input type submit for post-->
+            <input type="submit" value="Search!">
+        </div>
+    </form>
     <br>
     <hr>
     <!-- will contain a series of divs that have all formatted movie info-->

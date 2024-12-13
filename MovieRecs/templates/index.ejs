@@ -15,16 +15,20 @@
     </p>
     <br>
     <br>
-    <div id="search-bar">
-        <input id="movie-search" type="text" placeholder="Enter a movie title or genre...">
-        <!-- takes us to searchResults.ejs, might change to input type submit for post-->
-        <button id="search-button">Search!</button>
-    </div>
+    <form action="/search" method="post">
+        <div class="search-bar">
+            <input name="search" type="text" placeholder="Enter a movie title or genre...">
+            <!-- takes us to searchResults.ejs, might change to input type submit for post-->
+            <input type="submit" value="Search!">
+        </div>
+    </form>
     <br>
-    <div>
-        <!-- takes us to viewWatchLists.ejs, might change to input type submit for post-->
-        <button id="view-watchlists">My Watchlists</button>
-    </div>
+    <form action="/viewWatchLists" method="post">
+        <div>
+            <!-- takes us to viewWatchLists.ejs, might change to input type submit for post-->
+            <input type="submit" value="My Watchlists">
+        </div>
+    </form>
     <br>
     <hr>
 </body>
