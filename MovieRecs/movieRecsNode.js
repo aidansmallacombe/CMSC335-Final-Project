@@ -48,10 +48,11 @@ async function getDuration(movieId) {
 // given a list of recommended movies, gathers all needed info and returns html to display
 async function getRecommendationInfo(recommendations) {
   let recList = '';
-  for(const movie of recommendations.results) {
+  for (const movie of recommendations.results) {
     const credits = await getDirectorAndCast(movie.id);
     const duration = await getDuration(movie.id);
     const movieObj = {
+      id: movie.id, // Assuming you need this for form submission
       title: movie.title,
       genres: movie.genre_ids.map(id => genreObjs.genres.find(genre => genre.id === id).name).join(', '),
       rating: movie.vote_average,
@@ -60,12 +61,40 @@ async function getRecommendationInfo(recommendations) {
       actors: credits[1].join(', '),
       movieImageURL: 'https://image.tmdb.org/t/p/w300' + movie.poster_path
     };
-    recList += `<h1>${movieObj.title}</h1> <h3>Genre: ${movieObj.genres}</h3> <h3>Rating: ${movieObj.rating}</h3> <h3>Duration: ${movieObj.duration} minutes</h3>`;
-    recList += `<h3>Directed by: ${movieObj.director}</h3> <h3>Starring: ${movieObj.actors}</h3>`;
-    recList += `<img src="${movieObj.movieImageURL}"> <br>`;
+
+    // innerHTML
+    recList += `
+      <div style="display: flex; align-items: flex-start; margin-bottom: 20px;">
+        <div style="flex: 1; padding-right: 20px;">
+          <h2>${movieObj.title}</h2>
+          <h3>Genre: ${movieObj.genres}</h3>
+          <h3>Rating: ${movieObj.rating}</h3>
+          <h3>Duration: ${movieObj.duration} minutes</h3>
+          <h3>Directed by: ${movieObj.director}</h3>
+          <h3>Starring: ${movieObj.actors}</h3>
+          <form action="/add-to-watchlist" method="POST" style="margin-top: 10px;">
+            <label for="watchlist-${movieObj.id}">Add to Watchlist:</label>
+            <select name="watchlists" id="watchlist-${movieObj.id}" multiple style="margin-left: 5px;">
+              <option value="Favorites">Favorites</option>
+              <option value="Planned">Planned</option>
+              <option value="Watched">Watched</option>
+              <option value="On Hold">On Hold</option>
+            </select>
+            <input type="hidden" name="movieId" value="${movieObj.id}">
+            <input type="hidden" name="movieTitle" value="${movieObj.title}">
+            <button type="submit" style="margin-left: 10px;">Submit</button>
+          </form>
+        </div>
+        <div style="flex: 0 0 auto;">
+          <img src="${movieObj.movieImageURL}" alt="Movie Poster" style="max-width: 300px; height: auto;">
+        </div>
+      </div>
+      <hr>`;
   }
   return recList;
 }
+
+
 // render pages
 app.get('/', async (req, res) => {
     const genreURL = 'https://api.themoviedb.org/3/genre/movie/list?language=en';
@@ -142,6 +171,24 @@ app.post('/searchResults', async (req, res) => {
       recsFound = '0 results found';
     }
     res.render("searchResults", { movieName, recList, recsFound });
+});
+
+app.post('/add-to-watchlist', (req, res) => {
+  const { movieId, movieTitle, watchlists } = req.body;
+  /*watchlists --> represents the watchlists now associated with the movie
+    if multiple watchlists are selected, the watchlists object will be an array containing watchlist names
+      ex: if all 4 are selected, watchlists = ["Favorites", "Planned", "Watched", "On Hold"]
+    if only one watchlist is selected, watchlists object will be a string of that watchlist name
+      ex: if "Favorites" is the only selection, watchlists = "Favorites"
+    if none are selected, watchlists will be undefined, so be sure to check for that.
+
+    refer to the innerHTML in getReccomendatonInfo if confused :)
+  */
+  console.log(`Movie ID: ${movieId}, Title: ${movieTitle}, Watchlists: ${watchlists}`);
+  
+  /* ADD MONGODB LOGIC HERE */
+
+  res.redirect('/searchResults'); // Redirect back to the search results page
 });
 
 app.post('/viewWatchLists', (req, res) => {
