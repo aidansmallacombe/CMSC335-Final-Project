@@ -12,6 +12,21 @@ app.use(express.urlencoded({ extended: true }));
 app.set("views", path.resolve(__dirname, "templates"));
 app.set("view engine", "ejs");
 
+const uri = 'mongodb+srv://shellfish:fish1234@finalproject.tjmhf.mongodb.net/?retryWrites=true&w=majority&appName=FinalProject';
+
+const databaseAndCollection = {db: "CMSC335", collection: "Movies"}; 
+const { MongoClient, ServerApiVersion } = require('mongodb'); 
+const client = new MongoClient(uri, { serverApi: ServerApiVersion.v1 }); 
+async function main() { 
+  try { 
+      await client.connect(); 
+  } catch (e) { 
+      console.error(e); 
+  } 
+} 
+
+main();
+
 let genreObjs; // list of genre names with their associated id
 
 // access token for API
