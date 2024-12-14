@@ -187,7 +187,7 @@ app.post('/searchResults', async (req, res) => {
 });
 
 app.post('/add-to-watchlist', (req, res) => {
-  const { movieObj, watchlists } = req.body;
+  const { movieObj, watchlists} = req.body;
   /*
     watchlists --> represents the watchlists now associated with the movie
     if multiple watchlists are selected, the watchlists object will be an array containing watchlist names
@@ -205,13 +205,26 @@ app.post('/add-to-watchlist', (req, res) => {
     you can store the movie however you see fit, 
     I would reccomend storing the movie's id and title fields into each list its associated with and leave it there
   */
+  
 
   
-  console.log(`Movie ID: ${movieId}, Title: ${movieTitle}, Watchlists: ${watchlists}`);
+  //console.log(`Movie ID: ${movieId}, Title: ${movieTitle}, Watchlists: ${watchlists}`);
   
   /* ADD MONGODB LOGIC HERE */
+  if(watchlists) {
+    let entry;
+    if (watchlists instanceof Array) {
+      for (let i = 0; i < watchlists.length; i++) {
+        entry = {id: movie.id, name: movie.title};
+        client.db(databaseAndCollection.db).collection(`${watchlists[i]}`).insertOne(entry);
+      }
+    } else if (typeof watchlists === "string") {
+      entry = {id: movie.id, name: movie.title};
+      client.db(databaseAndCollection.db).collection(watchlists).insertOne(entry);
+    }
+  }
 
-  res.redirect('/searchResults'); // Redirect back to the search results page
+  res.redirect("/"); // Redirect back to the search results page
 });
 
 app.post('/viewWatchLists', (req, res) => {
