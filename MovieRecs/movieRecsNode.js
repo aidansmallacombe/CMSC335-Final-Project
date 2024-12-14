@@ -64,36 +64,34 @@ async function getRecommendationInfo(recommendations) {
 
     // innerHTML
     recList += `
-      <div style="display: flex; align-items: flex-start; margin-bottom: 20px;">
-        <div style="flex: 1; padding-right: 20px;">
-          <h2>${movieObj.title}</h2>
-          <h3>Genre: ${movieObj.genres}</h3>
-          <h3>Rating: ${movieObj.rating}</h3>
-          <h3>Duration: ${movieObj.duration} minutes</h3>
-          <h3>Directed by: ${movieObj.director}</h3>
-          <h3>Starring: ${movieObj.actors}</h3>
-          <form action="/add-to-watchlist" method="POST" style="margin-top: 10px;">
-            <label for="watchlist-${movieObj.id}">Add to Watchlist:</label>
-            <select name="watchlists" id="watchlist-${movieObj.id}" multiple style="margin-left: 5px;">
-              <option value="Favorites">Favorites</option>
-              <option value="Planned">Planned</option>
-              <option value="Watched">Watched</option>
-              <option value="On Hold">On Hold</option>
-            </select>
-            <input type="hidden" name="movieId" value="${movieObj.id}">
-            <input type="hidden" name="movieTitle" value="${movieObj.title}">
-            <button type="submit" style="margin-left: 10px;">Submit</button>
-          </form>
-        </div>
-        <div style="flex: 0 0 auto;">
-          <img src="${movieObj.movieImageURL}" alt="Movie Poster" style="max-width: 300px; height: auto;">
-        </div>
+    <div style="display: flex; align-items: flex-start; margin-bottom: 20px;">
+      <div style="flex: 1; padding-right: 20px;">
+        <h2>${movieObj.title}</h2>
+        <h3>Genre: ${movieObj.genres}</h3>
+        <h3>Rating: ${movieObj.rating}</h3>
+        <h3>Duration: ${movieObj.duration} minutes</h3>
+        <h3>Directed by: ${movieObj.director}</h3>
+        <h3>Starring: ${movieObj.actors}</h3>
+        <form action="/add-to-watchlist" method="POST" style="margin-top: 10px;">
+          <label for="watchlist-${movieObj.id}">Add to Watchlist:</label>
+          <select name="watchlists" id="watchlist-${movieObj.id}" multiple style="margin-left: 5px;">
+            <option value="Favorites">Favorites</option>
+            <option value="Planned">Planned</option>
+            <option value="Watched">Watched</option>
+            <option value="On Hold">On Hold</option>
+          </select>
+          <input type="hidden" name="movieObj" value='${JSON.stringify(movieObj)}'>
+          <button type="submit" style="margin-left: 10px;">Submit</button>
+        </form>
       </div>
-      <hr>`;
+      <div style="flex: 0 0 auto;">
+        <img src="${movieObj.movieImageURL}" alt="Movie Poster" style="max-width: 300px; height: auto;">
+      </div>
+    </div>
+    <hr>`;  
   }
   return recList;
 }
-
 
 // render pages
 app.get('/', async (req, res) => {
@@ -174,8 +172,9 @@ app.post('/searchResults', async (req, res) => {
 });
 
 app.post('/add-to-watchlist', (req, res) => {
-  const { movieId, movieTitle, watchlists } = req.body;
-  /*watchlists --> represents the watchlists now associated with the movie
+  const { movieObj, watchlists } = req.body;
+  /*
+    watchlists --> represents the watchlists now associated with the movie
     if multiple watchlists are selected, the watchlists object will be an array containing watchlist names
       ex: if all 4 are selected, watchlists = ["Favorites", "Planned", "Watched", "On Hold"]
     if only one watchlist is selected, watchlists object will be a string of that watchlist name
@@ -184,6 +183,15 @@ app.post('/add-to-watchlist', (req, res) => {
 
     refer to the innerHTML in getReccomendatonInfo if confused :)
   */
+  const movie = JSON.parse(movieObj); 
+  /* 
+    movie --> unserialized JSON object that was passed through a hidden html element.
+    has all the fields as seen above in getReccomendatonInfo. 
+    you can store the movie however you see fit, 
+    I would reccomend storing the movie's id and title fields into each list its associated with and leave it there
+  */
+
+  
   console.log(`Movie ID: ${movieId}, Title: ${movieTitle}, Watchlists: ${watchlists}`);
   
   /* ADD MONGODB LOGIC HERE */
