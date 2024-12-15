@@ -213,10 +213,32 @@ app.post('/viewWatchLists', async (req, res) => {
     assign them to whatever function call you need so that they each are an array of movie titles
     found in the associated watchlist
    */
-  const favorites = []; 
-  const planned = [];   
-  const watched = [];   
-  const onHold = [];    
+  let filter = {}
+  const db = await client.db(databaseAndCollection.db).collection("Favorites").find(filter).toArray();
+  const db_planned = await client.db(databaseAndCollection.db).collection("Planned").find(filter).toArray();
+  const db_watched = await client.db(databaseAndCollection.db).collection("Watched").find(filter).toArray();
+  const db_onHold = await client.db(databaseAndCollection.db).collection("On Hold").find(filter).toArray();
+  
+  let favorites = []; 
+  let planned = [];   
+  let watched = [];   
+  let onHold = [];   
+  //favorites = await db.map((entry) => entry.title);
+  //console.log(db)
+  db.forEach(entry => {
+    favorites.push(entry.name)
+  })
+  db_planned.forEach(entry => {
+    planned.push(entry.name)
+  })
+  db_watched.forEach(entry => {
+    watched.push(entry.name)
+  })
+  db_onHold.forEach(entry => {
+    onHold.push(entry.name)
+  })
+  //console.log(onHold)
+  
 
   // lambda to format lists of movie titles in each watchlist
   const makeUnorderedList = (watchlist) => {
