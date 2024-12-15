@@ -27,6 +27,11 @@ async function main() {
 
 main();
 
+// failsafe function in case of undefined/null values from api
+function failsafe(value) {
+  return value !== undefined && value !== null ? value : "unknown";
+}
+
 let genreObjs; // list of genre names with their associated id
 
 // access token for API
@@ -44,19 +49,23 @@ async function getDirectorAndCast(movieId) {
   const credits = await fetch(creditsURL, options)
                       .then(res => res.json())
                       .catch(err => console.error(err));
-  let director = credits.crew.find(({job}) => job === 'Director');
-  let cast = credits.cast.filter(({order}) => order < 3);
-  director = director.name;
-  cast = cast.map(actor => actor.name);
+  let director = failsafe(credits.crew.find(({job}) => job === 'Director'));
+  let cast = failsafe(credits.cast.filter(({order}) => order < 3));
+  if (director !== "unknown") {
+    director = director.name;
+  }
+  if (cast != "unknown") {
+    cast = cast.map(actor => actor.name);
+  }
   return [director, cast];
 }
 
 // Makes API call to get duration of a movie
 async function getDuration(movieId) {
   const url = `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`;
-  const details = await fetch(url, options)
-                        .then(res => res.json())
-                        .catch(err => console.error(err));
+  const details = failsafe(await fetch(url, options)
+                          .then(res => res.json())
+                          .catch(err => console.error(err)));
   return details.runtime;
 }
 
@@ -64,13 +73,13 @@ async function getDuration(movieId) {
 async function getRecommendationInfo(recommendations) {
   let recList = '';
   for (const movie of recommendations.results) {
-    const credits = await getDirectorAndCast(movie.id);
-    const duration = await getDuration(movie.id);
+    const credits = await getDirectorAndCast(movie.id); // failsafes in function
+    const duration = await getDuration(movie.id); // failsafes in function
     const movieObj = {
       id: movie.id, // Assuming you need this for form submission
       title: movie.title,
-      genres: movie.genre_ids.map(id => genreObjs.genres.find(genre => genre.id === id).name).join(', '),
-      rating: movie.vote_average,
+      genres: failsafe(movie.genre_ids.map(id => genreObjs.genres.find(genre => genre.id === id).name).join(', ')),
+      rating: failsafe(movie.vote_average),
       duration: duration,
       director: credits[0],
       actors: credits[1].join(', '),
@@ -245,7 +254,7 @@ app.post('/viewWatchLists', async (req, res) => {
     if (watchlist.length === 0) {
       return '<p style="margin-left: 20px;">No movies found in this watchlist</p>'; 
     }
-    return `<ul style="margin-left: 20px;">${movies.map(title => `<li>${title}</li>`).join('')}</ul>`;
+    return `<ul style="margin-left: 20px;">${watchlist.map(title => `<li>${title}</li>`).join('')}</ul>`;
   };
 
   const favoritesUL = makeUnorderedList(favorites);
