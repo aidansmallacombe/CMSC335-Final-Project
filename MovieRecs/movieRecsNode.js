@@ -183,7 +183,7 @@ app.post('/searchResults', async (req, res) => {
       recList = 'Movie not found';
       recsFound = '0 results found';
     }
-    res.render("searchResults", { movieName, recList, recsFound });
+    res.render("searchResults", { recList, recsFound });
 });
 
 app.post('/add-to-watchlist', (req, res) => {
@@ -204,7 +204,7 @@ app.post('/add-to-watchlist', (req, res) => {
     }
   }
 
-  res.redirect('/searchResults'); 
+  res.redirect('/'); 
 });
 
 app.post('/viewWatchLists', async (req, res) => {
@@ -254,10 +254,10 @@ app.post('/viewWatchLists', async (req, res) => {
   const onHoldUL = makeUnorderedList(onHold);
 
   res.render('viewWatchLists', {
-    favorites: favoritesUL,
-    planned: plannedUL,
-    watched: watchedUL,
-    onHold: onHoldUL
+    favoritesUL,
+    plannedUL,
+    watchedUL,
+    onHoldUL
   });
 });
 
