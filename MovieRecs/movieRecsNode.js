@@ -100,7 +100,7 @@ async function getRecommendationInfo(recommendations) {
         </form>
       </div>
       <div style="flex: 0 0 auto;">
-        <img src="${movieObj.movieImageURL}" alt="Movie Poster" style="max-width: 300px; height: auto;">
+        <img src="${movieObj.movieImageURL}" alt="movie poster" style="max-width: 300px; height: auto;">
       </div>
     </div>
     <hr>`;  
@@ -188,27 +188,7 @@ app.post('/searchResults', async (req, res) => {
 
 app.post('/add-to-watchlist', (req, res) => {
   const { movieObj, watchlists} = req.body;
-  /*
-    watchlists --> represents the watchlists now associated with the movie
-    if multiple watchlists are selected, the watchlists object will be an array containing watchlist names
-      ex: if all 4 are selected, watchlists = ["Favorites", "Planned", "Watched", "On Hold"]
-    if only one watchlist is selected, watchlists object will be a string of that watchlist name
-      ex: if "Favorites" is the only selection, watchlists = "Favorites"
-    if none are selected, watchlists will be undefined, so be sure to check for that.
-
-    refer to the innerHTML in getReccomendatonInfo if confused :)
-  */
   const movie = JSON.parse(movieObj); 
-  /* 
-    movie --> unserialized JSON object that was passed through a hidden html element.
-    has all the fields as seen above in getReccomendatonInfo. 
-    you can store the movie however you see fit, 
-    I would reccomend storing the movie's id and title fields into each list its associated with and leave it there
-  */
-  
-
-  
-  //console.log(`Movie ID: ${movieId}, Title: ${movieTitle}, Watchlists: ${watchlists}`);
   
   /* ADD MONGODB LOGIC HERE */
   if(watchlists) {
@@ -224,12 +204,41 @@ app.post('/add-to-watchlist', (req, res) => {
     }
   }
 
-  res.redirect("/"); // Redirect back to the search results page
+  res.redirect('/searchResults'); 
 });
 
-app.post('/viewWatchLists', (req, res) => {
-    // placeholder for now, might handle differently
+app.post('/viewWatchLists', async (req, res) => {
+  /*
+    below are variables that represent the watchlists that will be fetched from mongoDB
+    assign them to whatever function call you need so that they each are an array of movie titles
+    found in the associated watchlist
+   */
+  const favorites = []; 
+  const planned = [];   
+  const watched = [];   
+  const onHold = [];    
+
+  // lambda to format lists of movie titles in each watchlist
+  const makeUnorderedList = (watchlist) => {
+    if (watchlist.length === 0) {
+      return '<p style="margin-left: 20px;">No movies found in this watchlist</p>'; 
+    }
+    return `<ul style="margin-left: 20px;">${movies.map(title => `<li>${title}</li>`).join('')}</ul>`;
+  };
+
+  const favoritesUL = makeUnorderedList(favorites);
+  const plannedUL = makeUnorderedList(planned);
+  const watchedUL = makeUnorderedList(watched);
+  const onHoldUL = makeUnorderedList(onHold);
+
+  res.render('viewWatchLists', {
+    favorites: favoritesUL,
+    planned: plannedUL,
+    watched: watchedUL,
+    onHold: onHoldUL
+  });
 });
+
 
 // server setup -> change later for public url
 const portNumber = 3000;

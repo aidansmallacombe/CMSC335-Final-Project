@@ -9,21 +9,17 @@
 <body>
     <h2>My Watchlists</h2>
     <br>
-    <label>Favorites ...........................................................
-        <!--onclick will take us to displayList.ejs with data from favorites list--> 
-        <button id="view-planned">View</button></label>
+    <h3>Favorites</h3>
+    <%- favorites %>
     <br>    
-    <label>Planned ............................................................. 
-        <!--onclick will take us to displayList.ejs with data from planned list-->
-        <button id="view-planned">View</button></label>
+    <h3>Planned</h3>
+    <%- planned %>
     <br>
-    <label>Watched ............................................................. 
-        <!--onclick will take us to displayList.ejs with data from watched list-->
-        <button id="view-planned">View</button></label>
+    <h3>Watched</h3>
+    <%- watched %> 
     <br>
-    <label>On Hold ............................................................. 
-        <!--onclick will take us to displayList.ejs with data from on hold list-->
-        <button id="view-planned">View</button></label>
+    <h3>On Hold</h3>
+    <%- onHold %>
     <br>
     <hr>
 </body>
