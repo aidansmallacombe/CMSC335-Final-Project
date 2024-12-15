@@ -96,8 +96,8 @@ async function getRecommendationInfo(recommendations) {
         <h3>Duration: ${movieObj.duration} minutes</h3>
         <h3>Directed by: ${movieObj.director}</h3>
         <h3>Starring: ${movieObj.actors}</h3>
-        <form action="/add-to-watchlist" method="POST" style="margin-top: 10px;">
-          <label for="watchlist-${movieObj.id}">Add to Watchlist:</label>
+        <form action="/add-to-watchlist" method="post" style="margin-top: 10px;">
+          <label for="watchlist-${movieObj.id}"></label>
           <select name="watchlists" id="watchlist-${movieObj.id}" multiple style="margin-left: 5px;">
             <option value="Favorites">Favorites</option>
             <option value="Planned">Planned</option>
@@ -105,7 +105,7 @@ async function getRecommendationInfo(recommendations) {
             <option value="On Hold">On Hold</option>
           </select>
           <input type="hidden" name="movieObj" value='${JSON.stringify(movieObj)}'>
-          <button type="submit" style="margin-left: 10px;">Submit</button>
+          <input type="submit" value="Add to Watchlist" style="margin-left: 10px;">
         </form>
       </div>
       <div style="flex: 0 0 auto;">
