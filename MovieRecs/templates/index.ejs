@@ -8,29 +8,28 @@
 
 <body>
     <h1>Welcome to MovieRecs!</h1>
-    <h3><em>The site that recommends your next movie.</em></h3>
+    <h4><em>The site that recommends your next movie.</em></h4>
     <br>
     <p> To start, please search up a movie or genre you like, we'll take care of the rest!
-        You can add results to a pre-defined watchlist, or to one of your own.
+        You can add your results to one or more of our watchlist options to keep track of your next movie marathon ;)
     </p>
     <br>
     <br>
     <form action="/search" method="post">
         <div class="search-bar">
             <input name="search" type="text" placeholder="Enter a movie title or genre...">
-            <!-- takes us to searchResults.ejs, might change to input type submit for post-->
+            <!-- takes us to searchResults.ejs -->
             <input type="submit" value="Search!">
         </div>
     </form>
     <br>
     <form action="/viewWatchLists" method="post">
         <div>
-            <!-- takes us to viewWatchLists.ejs, might change to input type submit for post-->
+            <!-- takes us to viewWatchLists.ejs -->
             <input type="submit" value="My Watchlists">
         </div>
     </form>
     <br>
     <hr>
 </body>
-
 </html>
