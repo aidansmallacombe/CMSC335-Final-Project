@@ -7,7 +7,7 @@ Welcome to MovieRecs! Our site allows users to get movie recomendations based on
 
 YouTube Video Link: ...
 
-APIs: ...
+APIs: TMDB (https://developer.themoviedb.org/docs/getting-started)
 
 Contact Email: asmallac@terpmail.umd.edu
 
