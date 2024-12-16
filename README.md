@@ -6,6 +6,8 @@ App Description: Allows users to search a movie title or genre and get recommend
 
 YouTube Video Link: https://youtu.be/qOrf2Dq9Qy0 (youtube took this video down because it thinks I was advertising a movie pirating site. I appealed, but the appeal will take up to 72 hours. I have posted to Piazza with no response yet, but I have emailed Nelson with the direct video file. Please understand that this is out of our control, and even though a video is required it, we have in fact recorded the video and attempted to send it in some other way. For questions, please email me at the contact email below.)
 
+New Google Drive video link per head TA's request: https://drive.google.com/file/d/1Y2VbuVI79CKRpQG2NZCBt7mR3SUECYrN/view?usp=sharing
+
 APIs: TMDB (https://developer.themoviedb.org/docs/getting-started)
 
 Contact Email: asmallac@terpmail.umd.edu
